@@ -1,0 +1,81 @@
+server:
+  port: ${PORT:0}
+
+spring:
+  profiles.active: development
+
+---
+#export $(cat .env | xargs)
+spring:
+  profiles: development
+  application:
+    name: serviceprovider
+  datasource:
+    url: ${SPRING_DATASOURCE_URL}
+    username: ${SPRING_DATASOURCE_USERNAME}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+    driverClassName: com.mysql.jdbc.Driver
+    test-on-borrow: true
+    test-while-idle: true
+    validation-query: select 1;
+    maxActive: 5
+    maxIdle: 5
+    minIdle: 2
+    initialSize: 0
+    maxWait: 30000
+    testOnReturn: false
+    testWhileIdle: false
+    timeBetweenEvictionRunsMillis: 5000
+    minEvictableIdleTimeMillis: 60000
+    removeAbandoned: false
+    removeAbandonedTimeout: 60
+    logAbandoned: false
+  jpa:
+    show-sql: true
+    generate-ddl: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        ddl-auto: update
+eureka:
+  instance:
+    hostname: localhost
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8661/eureka        
+kafka:
+  bootstrap-servers: localhost:9092
+  service-request:
+    groupId: providers
+    topic:
+      name: service-requests
+  mvc:
+    throw-exception-if-no-handler-found: true
+springdoc:
+  api-docs:
+    path: /api-docs
+scheduler:
+  request:
+    notification:
+      fixedRate: 5000
+service:
+  provider:
+    url: http://localhost:8081/api/provider
+security:
+  basic:
+    enable: false
+  ignored: /**
+logging:
+  file: servicerequest
+  path: var/log  
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    org.springframework.web: ERROR
+    com.projects.covid19.servicerequest: ERROR
+    org.hibernate: ERROR
+  

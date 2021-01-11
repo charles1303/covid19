@@ -1,0 +1,40 @@
+server:
+  port: 8663
+
+spring:
+  profiles.active: development
+  application:
+    name: service-proxy
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+   
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8661/eureka
+zuul:
+  host:
+    connect-timeout-millis: 5000000
+    socket-timeout-millis: 5000000
+  ignored-services: '*'
+  routes:
+    serviceitem:
+      path: /serviceitem/**
+      service-id: serviceitem
+      strip-prefix: true
+  
+logging:
+  file: serviceproxy
+  path: var/log  
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    org.springframework.web: ERROR
+    com.projects.covid19.serviceproxy: ERROR
+    org.hibernate: ERROR
+  

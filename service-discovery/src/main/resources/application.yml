@@ -1,0 +1,29 @@
+server:
+  port: 8661
+
+spring:
+  profiles.active: development
+  application:
+    name: service-discovery
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+   
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://{eureka.instance.hostname}:{server.port}/eureka
+logging:
+  file: servicediscovery
+  path: var/log  
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    org.springframework.web: ERROR
+    com.projects.covid19.servicediscovery: ERROR
+    org.hibernate: ERROR
+  

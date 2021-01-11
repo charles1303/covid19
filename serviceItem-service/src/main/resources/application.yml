@@ -1,0 +1,42 @@
+server:
+  port: ${PORT:0}
+
+spring:
+  profiles.active: development
+
+---
+#export $(cat .env | xargs)
+spring:
+  profiles: development
+  application:
+    name: serviceitem
+  redis: 
+    port: 6379
+    host: localhost
+  autoconfigure:
+     exclude: org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+eureka:
+  instance:
+    hostname: localhost
+    instance-id: ${spring.application.name}:${spring.application.instance_id:${random.value}}
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://localhost:8661/eureka
+  mvc:
+    throw-exception-if-no-handler-found: true
+springdoc:
+  api-docs:
+    path: /api-docs  
+logging:
+  file: serviceitem
+  path: var/log  
+  pattern:
+    console: "%d %-5level %logger : %msg%n"
+    file: "%d %-5level [%thread] %logger : %msg%n"
+  level:
+    org.springframework.web: ERROR
+    com.projects.covid19.serviceitem: ERROR
+    org.hibernate: ERROR
+  

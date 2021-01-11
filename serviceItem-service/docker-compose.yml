@@ -1,0 +1,25 @@
+version: '3.7'
+
+
+services:
+  item:
+      image: mvn-openjdk11-ubuntu:latest
+      ports:
+          - 8080
+      volumes:
+          - .:/api
+          - /home/charles/.m2/repository:/root/.m2/repository
+      command: >
+        sh -c "cd api &&
+               mvn clean package -o &&
+               java $JAVA_OPTS -jar target/*.jar"
+#      depends_on:
+#      - redis
+#  redis:
+#    image: redis-alpine:3.8
+#    command: ["redis-server", "/etc/redis.conf", "--appendonly", "yes"]
+    #hostname: redis
+    #volumes:
+    #  - redis-data:/data
+#volumes:
+#  redis-data:

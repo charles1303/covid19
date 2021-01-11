@@ -1,0 +1,28 @@
+version: '3.7'
+
+
+services:
+  item:
+      image: registry:5000/covid19/item-service:v1
+      ports:
+          - 8081
+      networks:
+          - default
+      volumes:
+          - /var/jenkins_home/.m2/repository:/root/.m2/repository
+  #      depends_on:
+#      - redis
+#  redis:
+#    image: redis-alpine:3.8
+#    command: ["redis-server", "/etc/redis.conf", "--appendonly", "yes"]
+     networks:
+          - default
+    #hostname: redis
+    #volumes:
+    #  - redis-data:/data
+#volumes:
+#  redis-data:  
+networks:
+  default:
+    external:
+      name: jenkins-docker-net
